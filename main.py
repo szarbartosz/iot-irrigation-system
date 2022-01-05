@@ -15,7 +15,7 @@ def prepare_sprinklers(sprinklersArr, sectorsNo):
 
 def prepare_humidity_data(humidityArr, sectorsNo):
     for i in range(sectorsNo):
-        humidity = int(input(f"Podaj porządaną wilgotność w sektorze {i + 1} [%]: "))
+        humidity = int(input(f"Podaj pożądaną wilgotność w sektorze {i + 1} [%]: "))
         humidityArr.append(humidity)
 
 
