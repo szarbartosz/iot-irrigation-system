@@ -1,5 +1,9 @@
 import json
 import mosquitto
+from geopy.geocoders import Nominatim
+import ssl
+import certifi
+import geopy.geocoders
 
 def prepare_sprinklers(sprinklersArr, sectorsNo):
     sprinklerId = 1
@@ -36,14 +40,19 @@ def assemble_ocnfig(sectorsNo, humidityArr, sprinklersArr):
 
 
 def handle_weather_forecast(data):
-    data["weather_forecast"] = input("Podaj miasto dla którego ma zostać sprawdzona prognoza pogody: ")
+    ctx = ssl.create_default_context(cafile=certifi.where())
+    geopy.geocoders.options.default_ssl_context = ctx
+    geolocator = Nominatim(user_agent="irrigation_system")
+    location = geolocator.geocode(input("Podaj miasto dla którego ma zostać sprawdzona prognoza pogody: "))
+    data["lat"] = location.latitude
+    data["lon"] = location.longitude
 
 
 if __name__ == '__main__':
     print("----SYSTEM NAWADNIAJĄCY TIR 2021/22----")
 
     mqttc = mosquitto.Mosquitto()
-    mqttc_server = input("Podaj adres brokera MQTT: ")
+    mqttc_server = input("\nPodaj adres brokera MQTT: ")
     mqttc.connect(mqttc_server, 1883, 60)
 
     sprinklers = []
