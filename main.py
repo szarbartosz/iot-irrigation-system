@@ -23,7 +23,7 @@ def prepare_humidity_data(humidityArr, sectorsNo):
         humidityArr.append(humidity)
 
 
-def assemble_ocnfig(sectorsNo, humidityArr, sprinklersArr):
+def assemble_config(sectorsNo, humidityArr, sprinklersArr):
     data = {"sectors": []}
 
     for i in range(1, sectorsNo + 1):
@@ -63,9 +63,9 @@ if __name__ == '__main__':
     prepare_sprinklers(sprinklers, numberOfSectors)
     prepare_humidity_data(desiredHumidity, numberOfSectors)
 
-    data = assemble_ocnfig(numberOfSectors, desiredHumidity, sprinklers)
+    data = assemble_config(numberOfSectors, desiredHumidity, sprinklers)
     handle_weather_forecast(data)
 
     print(json.dumps(data))
 
-    mqttc.publish("agh/iot/project9/config", json.dumps(data))
+    mqttc.publish("agh/iot/project9/config", json.dumps(data), retain=True)
